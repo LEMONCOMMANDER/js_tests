@@ -1,0 +1,59 @@
+promises, await, async
+
+start here: https://www.youtube.com/watch?v=li7FzDHYZpc
+
+promise - object that represents the eventual resolution of an asyncrhonous operation and its value -  
+** Promise is a keyword function that can take arguments **
+
+Besides await and async (see below), the Promise function has some methods including .then() and .catch()
+.then() executes after the promise is returned / task completes
+.catch() waits for any failure and then executes
+
+The success of the task (say a variable called result) and the error (say a variable called error) are defined by variables 
+on the offset of the parent function. For example, result will have the value = the successful return of the promise and 
+error will have a value that is the error message should the promise be false. 
+
+-----------
+
+anything after this code will default to async - which will execute before the code block with the request can complete. 
+For example:
+
+apirequest {
+    code with a 10s delay before completeion
+};
+console.log(anything);
+
+The console.log message will actually happen BEOFRE the apirequest completes - even though the .then waits for the message 
+inside the block. To solve this, we can use async and await on a parent block:
+
+-----------
+
+As depicted in the previous example, in real code application, the code will be sending requests to servers or APIs and not 
+have an immediate return. Instead,JS uses the promise object as a placeholder for that eventual "answer". Async and
+Await are options to determine HOW code is processed - the order and whether it "waits" for a task completion or not. 
+
+The await operator is used to wait for a Promise. It can ONLY be used inside an async function within JS code, but it can be 
+used on its own in a JS module.
+
+
+example:
+
+async function activity () {
+    let response = await apirequest; (get request) 
+    console.log(response); // this won't run until the await apirequest completes.
+};
+
+-----------
+
+you can use the two concepts together for more functional testing:
+
+note: error is defined somewhere else already 
+
+async function activity () {
+    try { //will attempt this
+        let response = await apirequest; (get request) 
+    console.log(response); // this won't run until the await apirequest completes.
+    } catch (error) { // if there is an error, do this
+        console.error('error: ${error}');
+    }
+};
