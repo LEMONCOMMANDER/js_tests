@@ -23,6 +23,7 @@ async function somethings() {
     let errorm;
     try {
         const response = await fetch("https://bored-api.appbrewery.com/random"); // Await the fetch response
+        console.log(response);
         const json = await response.json(); // Await the parsing of the JSON data
         console.log(json); // Log the parsed JSON
         check = "completed the fetch";
@@ -38,7 +39,7 @@ async function somethings() {
 }
 
 
-
+//somethings();
 module.exports = somethings;
 
 // the key components here are that a const variable called response is defined as the fetch request 

@@ -1,6 +1,9 @@
 promises, await, async
 
 start here: https://www.youtube.com/watch?v=li7FzDHYZpc
+then here: https://www.youtube.com/watch?v=670f71LTWpM
+** Template literal strings in JS **
+
 
 promise - object that represents the eventual resolution of an asyncrhonous operation and its value -  
 ** Promise is a keyword function that can take arguments **

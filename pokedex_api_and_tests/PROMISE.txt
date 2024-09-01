@@ -1,0 +1,34 @@
+explains the promise operations in the delay function in pokedex.mjs - this comes from GPT mainly 
+
+function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));    <-- Promise constructor 
+}
+
+NOTE: new is an operator that is used with anything that has a constructor function - new creates a new instance.
+
+My notes summary:
+
+The Promise object is used in asyncronous functions. If a task is called that can't be resolved immediately (like contacting an api), the Promise is a placeholder object... which will 
+wait until the task has a completed. Completed in this sense could mean success or failure.
+
+A function is passed to the Promise consturctor, called the executor function. This takes 2 parameters: 'resolve' or 'reject'.
+
+To use both cases you might see:
+... Promise (resolve, reject) => {
+    if (condition 1) {
+        resolve();
+    } else {
+        reject();
+    }
+};
+
+The resolve paramter in this case is the setTimeout function which further takes 2 paramters - a function to run and a time delay. The function itself is the 'resolve' paramter from
+the Promise object (or the executor function).
+
+This is the shorthand syntax for: 
+... Promise(resolve {           <--
+    setTimeout(resolve, ms);    <-- same Promise constructor
+});                             <--
+
+When the delay function is called - it returns a Promise. Once the resolve paramter condition (in this case a set timeout function) is completed, it returns to the place where it
+was called (assuming delay was called in a seperate function). This is relevant in *** asyncrhonous *** functions because the function will pause until the Promise is returned. 
