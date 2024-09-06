@@ -66,7 +66,20 @@ const errorType = {
     user_input_error: "user_input_error"
 };
 
-async function user_query(optionTypes, userOrTests, exitTypes, continueTypes, errorTypes, u_in) {
+async function user_query(id = 1, dataOption, yON1 = "no", yON2 = "no") {
+    u_in = dataOption; //temp reassign while working on code
+    const userOrTest = [];
+    const optionType = [];
+    const exitType = [];
+    const continueType = [];
+    const errorType = [];
+
+
+
+
+
+    fetchPokemon(id);
+
     let u_input;
     let info = []; //clears array on recursion 
     // ---------------------------------------------------------------------------------------------------------- SHOW OPTIONS TO USER
@@ -92,7 +105,7 @@ async function user_query(optionTypes, userOrTests, exitTypes, continueTypes, er
         userOrTest.push(userOrTest.real_user);
         // FOR JEST TESTING --
     } else { //takes the input of the function for testing purposes in JEST
-        console.log('IM HERE>>>');
+        // console.log('IM HERE>>>');
         u_input = u_in;
         userOrTest.push(userOrTest.u_in);
     }
@@ -106,7 +119,7 @@ async function user_query(optionTypes, userOrTests, exitTypes, continueTypes, er
 
     //INSIDE USER_QUERY FUNCTION 
     async function next() {
-        let next_q = u_in ? continueTypes[u_in]: await ask3();
+        let next_q = u_in ? continueTypes[u_in] : await ask3(); //ternary where next_q = the user input OR runs ask3 if undefined  
         next_q = next_q.toLowerCase();
         if (next_q === 'yes') {
             statuses4.push("same_p_continue");
@@ -300,5 +313,5 @@ async function pokedex(u_in = undefined) {
 
 module.exports = pokedex; //for use in jest testing
 
-// pokedex(); //for executing the function directly in node.
+pokedex(); //for executing the function directly in node.
 
