@@ -1,0 +1,95 @@
+Pokedex Function study notes:
+
+Many of these ideas where co-developed by chat GPT - as this project is made for learning. I then take the code and change it to match my needs... but there is no point to this
+if I don't learn from the process. All the notes here are my external study of the code to better understand why GPT uses certain structures in JS. Much of my study is through the 
+internet and MDN docs.
+
+NOTE 1 - Promise object and Delay function
+    MDN: ***** DEFINITOIN ******
+    "A Promise is a proxy for a value not necessarily known when the promise is created... The eventual state of a pending promise can either be fulfilled with a value or
+    rejected with a reason (error)."
+
+    The Promise object is used in asyncronous functions. If a task is called that can't be resolved immediately (like contacting an api), the Promise is a placeholder object... which will 
+    wait until the task has a completed. Completed in this sense could mean success or failure.
+
+    A function is passed to the Promise consturctor, called the executor function. This takes 2 parameters: 'resolve' or 'reject'.
+
+            To use both cases you might see:
+            ... Promise (resolve, reject) => {
+                if (condition 1) {
+                    resolve();
+                } else {
+                    reject();
+                }
+            };
+
+    The resolve paramter in this case is the setTimeout function which further takes 2 paramters - a function to run and a time delay. The function itself is the 'resolve' paramter from
+    the Promise object (or the executor function)...
+    
+    A study of the Delay function in program: 
+
+        Shorthand:
+            function delay(ms) {
+                    return new Promise(resolve => setTimeout(resolve, ms));    <-- Promise constructor 
+            }
+
+        ALT: 
+            function delay(ms) {
+                return new Promise(function (resolve, reject) {                <-- Immediately after Promise is the      
+                    setTimeout(function () {                                   <--         
+                        resolve(); // Resolve the promise after the delay      <-- Promise constructor,
+                    }, ms);                                                    <-- 
+                });                                                            <-- The constructor function runs setTimeout, which calls on "resolve" to return the promise  
+            }   
+
+        OR: THIS IS THE SAME AS THE ABOVE BUT USING () => INSTEAD OF FUNCTION 
+            
+            function delay(ms) {
+                return new Promise((resolve) => {
+                    // setTimeout is used to execute the `resolve` function after `ms` milliseconds
+                    setTimeout(() => {
+                        resolve(); // Resolve the promise after the delay
+                    }, ms);
+                });
+            }
+
+    NOTE: setTimeout takes at least 2 arguments, 1. a function to call, 2. how long to wait until the function is called. Therefore, 1. can just be resolve(), hence the first shorthand.
+    NOTE: "new" is an operator that is used with anything that has a constructor function - new creates a new instance. 
+
+
+NOTE 2 - TIMEOUT
+    Timeout: I want to establish a timeout option since this program utilzes user inputs. IF there is no input after a set duration, I want to execute the exit() program
+
+        To do this, I need ot use a promise. This idea comes from GPT but this is my study of the idea, which will have unique application in my program.
+        Promise - this will be a palceholder for the resolution of a time based result - the Promise object takes 2 parameters, a "resolve" and a "reject". We will establish a 
+            specific Promise for our timeout. The GPT code is as follows:
+
+                let timeout;
+                const timeoutPromise = new Promise((_, reject) => {
+                    timeout = setTimeout(() => {
+                        console.log("Timeout reached! Exiting...");
+                        reject(new Error('timeout'));
+                    }, timeoutDuration);
+                });
+
+            The first line creates a constant variable called timeoutPromise, which is the unique promise for our timeout (mentioned above). The _ in the resolve path represents a palceholder
+            as the resolve will not be called. The "resolve" and "reject" paramaters are really just variables that can be called in the function... therefore our code TELLS the function
+            beside the Promise what to do with those variables. 
+
+                    Theoretically they can be called anything, but "resolve" and "reject" are best practices.
+
+            observing the code above, the first thing that happens is that we set the value of timeout to the setTimeout() function. The setTimeout() function actulaly takes some arguments...
+            the first is a function to execute (which in the code above is a temporary function), and the second is a duration to wait in milliseconds. I believe there are more but these 
+            are the only 2 used here so that's what this note will focus on.
+
+            The temporary function is the thing that executes AFTER the duration has be exceeded, which is why the code above calls the "reject" path in the temporary code. In other words,
+            this is saying:
+
+                "wait for the specified amount of time and if it is exceeded, then run the temporary function"
+
+NOTE 3 - PROMISE.RACE()
+    First, see MDN docs - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/race
+
+    Simply speaking, Promise.race() is a method of promise that takes an array / list of iterables (basically an array of promises) and executes whatever returns first.
+
+    In the use case here, we are comparing the ask() function, which looks for user input, against a time delay 
